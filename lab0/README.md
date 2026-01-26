@@ -1,6 +1,6 @@
 # Lab 0 RTL Getting Started
 
-**Objective:** The main purpose of this lab, along with the succeeding one, is to acquaint you with RTL programming, specifically Verilog. These initial steps aim to equip you with a strong foundation in Verilog, setting the stage for more advanced labs ahead.
+**Objective:** The main purpose of this lab, along with the succeeding one, is to acquaint you with RTL (Register Transfer Level) programming, specifically Verilog. These initial steps aim to equip you with a strong foundation in Verilog, setting the stage for more advanced labs ahead.
 
 **Description:** This lab involves the implementation of a variety of basic hardware modules using Verilog, including an ALU and FPU. In addition, you will be tasked with developing the requisite testbench code to verify the correctness of your modules. This dual approach not only provides hands-on experience with Verilog but also emphasizes the importance of testing and validation in hardware design.
 
