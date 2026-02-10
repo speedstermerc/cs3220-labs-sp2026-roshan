@@ -35,7 +35,7 @@ VM_PREFIX = Vpipeline
 VM_MODPREFIX = Vpipeline
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-DIDMEMINITFILE=/home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part2/test9.mem -DVCD_OUTPUT -DDPRINTF \
+	-DIDMEMINITFILE=/home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/xor.mem -DVCD_OUTPUT -DDPRINTF \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
