@@ -71,6 +71,29 @@ module AGEX_STAGE(
       `SUB_I:   begin
           aluout_AGEX = regval1_AGEX - regval2_AGEX;
       end
+      `MUL_I:   aluout_AGEX = regval1_AGEX * regval2_AGEX; // New: MUL
+
+      `AND_I:   aluout_AGEX = regval1_AGEX & regval2_AGEX;
+      `OR_I:    aluout_AGEX = regval1_AGEX | regval2_AGEX;
+      `XOR_I:   aluout_AGEX = regval1_AGEX ^ regval2_AGEX;
+      `ANDI_I:  aluout_AGEX = regval1_AGEX & sxt_imm_AGEX;
+      `ORI_I:   aluout_AGEX = regval1_AGEX | sxt_imm_AGEX;
+      `XORI_I:  aluout_AGEX = regval1_AGEX ^ sxt_imm_AGEX;
+
+      `SLT_I:   aluout_AGEX = ($signed(regval1_AGEX) < $signed(regval2_AGEX)) ? 32'd1 : 32'd0;
+      `SLTI_I:  aluout_AGEX = ($signed(regval1_AGEX) < $signed(sxt_imm_AGEX)) ? 32'd1 : 32'd0;
+      `SLTU_I:  aluout_AGEX = (regval1_AGEX < regval2_AGEX) ? 32'd1 : 32'd0;
+      `SLTIU_I: aluout_AGEX = (regval1_AGEX < sxt_imm_AGEX) ? 32'd1 : 32'd0;
+
+      `SLL_I:   aluout_AGEX = regval1_AGEX << regval2_AGEX[4:0];
+      `SLLI_I:  aluout_AGEX = regval1_AGEX << sxt_imm_AGEX[4:0];
+
+      `SRL_I:   aluout_AGEX = regval1_AGEX >> regval2_AGEX[4:0];
+      `SRLI_I:  aluout_AGEX = regval1_AGEX >> sxt_imm_AGEX[4:0];
+
+      `SRA_I:   aluout_AGEX = $signed(regval1_AGEX) >>> regval2_AGEX[4:0];
+      `SRAI_I:  aluout_AGEX = $signed(regval1_AGEX) >>> sxt_imm_AGEX[4:0];
+
       `LUI_I:   aluout_AGEX = sxt_imm_AGEX;
       `AUIPC_I: aluout_AGEX = PC_AGEX + sxt_imm_AGEX;
       `JAL_I:   aluout_AGEX = PC_AGEX + 4;

@@ -50,7 +50,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/and.mem
@@ -77,7 +77,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/bgeu.mem
@@ -266,7 +266,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/lw.mem
@@ -320,7 +320,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/or.mem
@@ -347,7 +347,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/simple.mem
@@ -401,7 +401,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/sll.mem
@@ -428,7 +428,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/slti.mem
@@ -455,7 +455,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/sltiu.mem
@@ -482,7 +482,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/slt.mem
@@ -509,7 +509,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/sltu.mem
@@ -536,7 +536,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/srai.mem
@@ -563,7 +563,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/sra.mem
@@ -590,7 +590,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/srli.mem
@@ -617,7 +617,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/srl.mem
@@ -644,7 +644,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/sub.mem
@@ -725,7 +725,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: -7
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/testall.mem
@@ -752,7 +752,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/xori.mem
@@ -779,7 +779,7 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
 
 TESTING: /home/rsaigal/Documents/2026spring/cs3220-labs-sp2026-roshan/lab1/test/part3/xor.mem
@@ -806,5 +806,5 @@ make[1]: Leaving directory '/home/rsaigal/Documents/2026spring/cs3220-labs-sp202
 -- RUN ---------------------
 obj_dir/Vpipeline
 Total instructions=0, cycles=0, IPC=-nan
-Failed. exitcode: 0
+Passed!
 -- DONE --------------------
