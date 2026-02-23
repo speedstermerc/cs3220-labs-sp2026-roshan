@@ -71,7 +71,7 @@ module AGEX_STAGE(
       `SUB_I:   begin
           aluout_AGEX = regval1_AGEX - regval2_AGEX;
       end
-      `MUL_I:   aluout_AGEX = regval1_AGEX * regval2_AGEX; // New: MUL
+      `MUL_I:   aluout_AGEX = regval1_AGEX * regval2_AGEX;
 
       `AND_I:   aluout_AGEX = regval1_AGEX & regval2_AGEX;
       `OR_I:    aluout_AGEX = regval1_AGEX | regval2_AGEX;
