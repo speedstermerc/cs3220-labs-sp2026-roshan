@@ -18,7 +18,7 @@
 // address space is m 0x00000000 to 0x000fffff
   // [NOTICE] please note that both imem and dmem use the SAME "IDMEMINITFILE".
   // you need to change this line to change which test file to read 
-  `define IDMEMINITFILE "/home/zhifan/workspace/cs3220-23fall/lab2/test/towers/towers.mem"
+  `define IDMEMINITFILE "/Users/roshan/Documents/Spring2026/cs3220-labs-sp2026-roshan/lab2/test/part2/test9.mem"
   `define IMEMADDRBITS  16
   `define IMEMWORDBITS  2
   `define IMEMWORDS	  (1 << (`IMEMADDRBITS - `IMEMWORDBITS))
@@ -201,14 +201,15 @@
 
 /** please update the following define with your own values */ 
 
- `define FE_latch_WIDTH  (1 + `INSTBITS+`DBITS+ `DBITS + `DBITS)
-  `define DE_latch_WIDTH  (1 + `INSTBITS+`DBITS+`DBITS+ `IOPBITS + `DBITS + `DBITS + `DBITS + `DBITS + 1 + 1 + 1 + 1 + 1 + `REGNOBITS)
+ `define FE_latch_WIDTH  (1 + `INSTBITS+`DBITS+ `DBITS + `DBITS + 10 + `DBITS) //added 8 to bring over the pht index to agex
+  `define DE_latch_WIDTH  (1 + `INSTBITS+`DBITS+`DBITS+ `IOPBITS + `DBITS + `DBITS + `DBITS + `DBITS + 1 + 1 + 1 + 1 + 1 + `REGNOBITS + 10 + `DBITS)//added 8 to briing the pht index to agex
 
   `define AGEX_latch_WIDTH        (1 + `INSTBITS + `DBITS + `IOPBITS + `DBITS + `DBITS + `DBITS + 1 + 1 + `REGNOBITS + 1)
   `define MEM_latch_WIDTH    (1 + `INSTBITS+`DBITS+ `IOPBITS + `DBITS + `DBITS + `DBITS + 1 + `REGNOBITS) 
 
   `define from_DE_to_FE_WIDTH  (1) 
-  `define from_AGEX_to_FE_WIDTH (1 + `DBITS)
+  `define from_AGEX_to_FE_WIDTH (1 + `DBITS + 1 + 1 + `DBITS + 10) // added 1 + 1 + 32 + 8
+                                                    // branch or jump?  was it taken?  pc of the branch/jump,  PHT index used
   `define from_MEM_to_FE_WIDTH (1)
   `define from_WB_to_FE_WIDTH (1)
 

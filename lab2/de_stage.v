@@ -30,7 +30,11 @@ module DE_STAGE(
   wire [`DBITS-1:0] inst_count_DE; 
   wire[`DE_latch_WIDTH-1:0] DE_latch_contents; 
 
- 
+  /////////////////////////////////////////
+  // CHANGES FOR LAB 2 BRANCH PREDICTION //
+  /////////////////////////////////////////
+  wire [9:0] pht_index;
+  wire [31:0] predicted_pc;
 
 // extracting a part of opcode 
   wire [2:0] F3_DE; 
@@ -338,7 +342,9 @@ end
             inst_DE,
             PC_DE, 
             pcplus_DE,
-            inst_count_DE 
+            inst_count_DE,
+            pht_index,
+            predicted_pc
             }  = from_FE_latch;  // based on the contents of the latch, you can decode the content 
 
 
@@ -361,7 +367,9 @@ end
                                   rd_mem_DE,
                                   wr_mem_DE,
                                   wr_reg_DE,
-                                  rd_DE
+                                  rd_DE,
+                                  pht_index,
+                                  predicted_pc
                                   }; 
 
 

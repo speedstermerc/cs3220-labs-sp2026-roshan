@@ -94,7 +94,15 @@ int main(int argc, char** argv, char** env) {
 #ifdef DPRINTF
     std::cout << "Total instructions=" << std::dec << inst_count_WB << ", cycles=" << (timestamp_WB / 2) << ", IPC=" << ((inst_count_WB * 2.0f) / timestamp_WB) << std::endl; 
 #endif
-
+    uint32_t total_branches = dut->pipeline->my_AGEX_stage->total_branches;
+    uint32_t correct_branches = dut->pipeline->my_AGEX_stage->correct_branches;
+    
+    if (total_branches > 0) {
+        float accuracy = ((float)correct_branches / total_branches) * 100.0f;
+        // std::cout << "Total Branches: " << std::dec << total_branches << std::endl;
+        // std::cout << "Correct Predictions: " << std::dec << correct_branches << std::endl;
+        std::cout << "Accuracy=" << accuracy << "%" << std::endl;
+    }
     int exitcode = (int)dut->pipeline->my_WB_stage->last_WB_value[3];
 
     // Final model cleanup

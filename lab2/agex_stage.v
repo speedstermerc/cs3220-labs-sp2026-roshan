@@ -30,6 +30,9 @@ module AGEX_STAGE(
  
   /////////////////////////////////////////////////////////////////////////////
   // TODO: Complete remaining code logic here!
+  wire [9:0] pht_index;
+  wire [31:0] predicted_pc;
+  
 
   wire is_br_AGEX;
   wire is_jmp_AGEX;
@@ -47,6 +50,10 @@ module AGEX_STAGE(
   reg [`DBITS-1:0] br_target_AGEX;
   wire br_mispred_AGEX;
 
+  wire is_branch_or_jump = is_br_AGEX || is_jmp_AGEX;
+  wire is_taken = (is_br_AGEX && br_cond_AGEX) || is_jmp_AGEX;
+  reg [31:0] total_branches /* verilator public */;
+  reg [31:0] correct_branches /* verilator public */;
   
   // Calculate branch condition
   // TODO: complete the code
@@ -119,7 +126,7 @@ module AGEX_STAGE(
   end
 
   assign br_mispred_AGEX = ((is_br_AGEX || is_jmp_AGEX) 
-                         && (br_target_AGEX != pcplus_AGEX)) ? 1 : 0;
+                         && (br_target_AGEX != predicted_pc)) ? 1 : 0;
 
     assign  {                     
                                   valid_AGEX,
@@ -137,7 +144,9 @@ module AGEX_STAGE(
                                   rd_mem_AGEX,
                                   wr_mem_AGEX,
                                   wr_reg_AGEX,
-                                  wregno_AGEX
+                                  wregno_AGEX,
+                                  pht_index,
+                                  predicted_pc
                                   } = from_DE_latch; 
     
  
@@ -159,10 +168,18 @@ module AGEX_STAGE(
   always @ (posedge clk ) begin
     if(reset) begin
       AGEX_latch <= {`AGEX_latch_WIDTH{1'b0}};
+      total_branches <= 0;
+      correct_branches <= 0;
         end 
     else 
         begin
             AGEX_latch <= AGEX_latch_contents ;
+            if (is_branch_or_jump) begin
+                total_branches <= total_branches + 1;
+                if (!br_mispred_AGEX) begin
+                    correct_branches <= correct_branches + 1;
+                end
+            end
         end 
   end
 
@@ -170,7 +187,11 @@ module AGEX_STAGE(
   // forward signals to FE stage
   assign from_AGEX_to_FE = { 
     br_mispred_AGEX, 
-    br_target_AGEX
+    br_target_AGEX,
+    is_branch_or_jump,
+    is_taken,
+    PC_AGEX,
+    pht_index
   };
 
   // forward signals to DE stage
