@@ -238,9 +238,24 @@ module DE_STAGE(
   assign rs2_DE = inst_DE[24:20];
   assign rd_DE  = inst_DE[11:7]; 
 
+  wire [31:0] OP3_from_FU;
+  wire [2:0]  CSR_OUT_from_FU;
+  assign {OP3_from_FU, CSR_OUT_from_FU} = from_FU_to_DE;
+
+
   // Read register file
-  assign rs1_val_DE = reg_file[rs1_DE];
-  assign rs2_val_DE = reg_file[rs2_DE];
+  // assign rs1_val_DE = reg_file[rs1_DE];
+  // assign rs2_val_DE = reg_file[rs2_DE];
+
+
+  assign rs1_val_DE = (rs1_DE == `OP3_REG_IDX) ? OP3_from_FU :
+                    (rs1_DE == `CSR_OUT_REG_IDX) ? {29'b0, CSR_OUT_from_FU} :
+                    reg_file[rs1_DE];
+
+  assign rs2_val_DE = (rs2_DE == `OP3_REG_IDX)     ? OP3_from_FU :
+                      (rs2_DE == `CSR_OUT_REG_IDX) ? {29'b0, CSR_OUT_from_FU} :
+                      reg_file[rs2_DE];
+
 
   // decode instruction info
   assign is_br_DE  = ((op_I_DE == `BEQ_I) || (op_I_DE == `BNE_I) || (op_I_DE == `BLT_I) || (op_I_DE == `BGE_I) || (op_I_DE == `BLTU_I) || (op_I_DE == `BGEU_I)) ? 1 : 0;
@@ -314,7 +329,13 @@ module DE_STAGE(
                          || (use_rs2_DE && in_use_regs[rs2_DE]);
 
   //TODO: part2/bonus modify as necessary
-  assign pipeline_stall_DE = has_data_hazards || br_mispred_AGEX;
+  wire is_load_op1 = (valid_DE && op_I_DE == `LW_I && rd_DE == `OP1_REG_IDX);
+  wire is_load_op2 = (valid_DE && op_I_DE == `LW_I && rd_DE == `OP2_REG_IDX);
+  wire alu_not_ready_stall = (is_load_op1 && ~CSR_OUT_from_FU[0]) || 
+                             (is_load_op2 && ~CSR_OUT_from_FU[1]);
+
+  assign pipeline_stall_DE = has_data_hazards || br_mispred_AGEX || alu_not_ready_stall;
+  // assign pipeline_stall_DE = has_data_hazards || br_mispred_AGEX;
 
   always @(posedge clk) begin
     if (reset) begin
@@ -391,5 +412,54 @@ module DE_STAGE(
   //fetch status update from FU stage; 
   //Recommended states transition: load aluop --> load op1 --> load op2 --> alu processing --> store results to memory
   //Need to handle the stalls from part2 
+  reg [31:0] alu_op1_reg, alu_op2_reg;
+  reg [3:0]  alu_op_reg;
+
+  //0: signals the result can be overwritten (we have processed the result)
+  //1: signals OP1 feed is stable
+  //2: signals OP2 feed is stable
+  reg [2:0]  csr_alu_in_reg;
+
+  wire is_reading_op3_DE = (valid_DE && op_I_DE == `SW_I && rs2_DE == `OP3_REG_IDX);
+
+  always @(negedge clk) begin
+    if (reset) begin
+      alu_op1_reg    <= 32'b0;
+      alu_op2_reg    <= 32'b0;
+      alu_op_reg     <= 4'b0;
+      csr_alu_in_reg <= 3'b001; // CSR_ALU_IN[0] = 1 acknowledges/reset state
+    end else begin
+
+      csr_alu_in_reg[1] <= 1'b0; 
+      csr_alu_in_reg[2] <= 1'b0;
+
+      if (wr_reg_WB) begin
+        case (wregno_WB)
+          `ALUOP_REG_IDX: begin
+            alu_op_reg <= regval_WB[3:0];
+          end
+          `OP1_REG_IDX: begin
+            alu_op1_reg <= regval_WB;
+            csr_alu_in_reg[1] <= 1'b1; // OP1 Stable
+            csr_alu_in_reg[0] <= 1'b0; // waiting on result (result not recieved yet)
+          end
+          `OP2_REG_IDX: begin
+            alu_op2_reg <= regval_WB;
+            csr_alu_in_reg[2] <= 1'b1; // OP2 Stable
+          end
+          default: ;
+        endcase
+      end
+      if (is_reading_op3_DE && ~pipeline_stall_DE) begin
+            // reset after we read from the destination register.
+            csr_alu_in_reg[0] <= 1'b1;
+            csr_alu_in_reg[1] <= 1'b0;
+            csr_alu_in_reg[2] <= 1'b0;
+          end
+    end
+  end
+
+  assign from_DE_to_FU = {alu_op1_reg, alu_op2_reg, alu_op_reg, csr_alu_in_reg};
+
 
 endmodule
