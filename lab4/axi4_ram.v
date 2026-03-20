@@ -162,33 +162,87 @@ always @* begin
     s_axi_bid_next = s_axi_bid_reg;
     s_axi_bvalid_next = s_axi_bvalid_reg && !s_axi_bready;
 
+    /*
+    NOTES from AXI Architecture Documentation:
+    5 Channels:
+    • Read address, which has signal names beginning with AR.
+    • Read data, which has signal names beginning with R.
+    • Write address, which has signal names beginning with AW.
+    • Write data, which has signal names beginning with W.
+    • Write response, which has signal names beginning with B.
+    */
+
     case (write_state_reg)
-        WRITE_STATE_IDLE: begin
+        WRITE_STATE_IDLE: begin // IN THIS STATE, RAM IS LISTENING FOR A WRITE REQUEST
             //TODO: Finish the following code 
             //prepare to accept write address
+            s_axi_awready_next = 1;
             //once condition is met 
-            //  assign all the metadata e.g., write_id_next, write_addr_next, write_count_next, write_size_next, write_burst_next
-            //  set the state not ready to accept write address]
-            //  set the state to ready to accept write data
+            if (s_axi_awvalid && s_axi_awready) begin //handshake
+                //  assign all the metadata e.g., write_id_next, write_addr_next, write_count_next, write_size_next, write_burst_next
+                write_id_next = s_axi_awid;
+                write_addr_next = s_axi_awaddr;
+                write_count_next = s_axi_awlen;
+                write_size_next = s_axi_awsize;
+                write_burst_next = s_axi_awburst;
+                //  set the state not ready to accept write address]
+                s_axi_awready_next = 0; // Stop accepting addresses
+                //  set the state to ready to accept write data
+                s_axi_wready_next = 1; // ready to accept data
+                write_state_next = WRITE_STATE_WDATA;
             //else:
-            //  set the state to idle
-
+            end else begin
+                //  set the state to idle
+                write_state_next = WRITE_STATE_IDLE;
+            end
         end
-        WRITE_STATE_WDATA: begin
+        WRITE_STATE_WDATA: begin // IN THIS STATE, RAM IS NOW WAITING FOR THE ACTUAL DATA
             //TODO: Finish the following code 
             //prepare to accept write data
+            s_axi_wready_next = 1;
             //once condition is met signal (mem_wr_en) to write data to memory 
-            //  also check if response is ready to be sent
+            if (s_axi_wvalid && s_axi_wready) begin // handshake
+                mem_wr_en = 1;
+            //  also check if response is ready to be sent - response is ready when we encounter the last beat of a burst
+                if (s_axi_wlast) begin
+                    s_axi_wready_next = 0;
+                    s_axi_bid_next = write_id_reg;
+                    s_axi_bvalid_next = 1;
             //  if response is ready to be sent
+                    if (s_axi_bready) begin
+                        s_axi_bvalid_next = 1;
             //      assign all the metadata e.g., s_axi_bid_next, s_axi_bvalid_next, s_axi_awready_next
             //      set the state to idle
+                        s_axi_awready_next = 1;
+                        write_state_next = WRITE_STATE_IDLE;
+                    end else begin
+                        write_state_next = WRITE_STATE_RESP;
+                    end
+                end else begin
+                    write_state_next = WRITE_STATE_WDATA;
+                end
             //  otherwise go the response state t wait for response to be ready
             //Note: we don't do much about the response here, other than propagating the metadata in a synchronous manner
-
+            end else begin
+                write_state_next = WRITE_STATE_WDATA;
+            end
         end
-        WRITE_STATE_RESP: begin
+        WRITE_STATE_RESP: begin // IN THIS STATE, RAM IS WAITING FOR MASTER TO ACK THE "Success"
             //TODO: Finish the following code
             //Handle the response
+            s_axi_bid_next = write_id_reg;
+
+            s_axi_bvalid_next = 1;
+            // s_axi_bready is from master
+            if (s_axi_bready && s_axi_bvalid) begin
+                s_axi_bvalid_next = 0;
+                s_axi_awready_next = 1;
+                write_state_next = WRITE_STATE_IDLE;
+
+            end else begin
+                write_state_next = WRITE_STATE_RESP;
+
+            end
 
         end
     endcase
@@ -241,18 +295,43 @@ always @* begin
     s_axi_arready_next = 1'b0;
 
     case (read_state_reg)
-        READ_STATE_IDLE: begin
+        READ_STATE_IDLE: begin // In this state, RAM is waiting for a read address, once it recieves, it moves to READ_STATE_RDATA
             //TODO: Finish the following code
             //similar manner as the write state machine
+            s_axi_arready_next = 1'b1;
+
+            if (s_axi_arvalid && s_axi_arready) begin // handshake
+                read_id_next = s_axi_arid;
+                read_addr_next = s_axi_araddr;
+                read_count_next = s_axi_arlen;
+                read_size_next = s_axi_arsize;
+                read_burst_next = s_axi_arburst;
+                s_axi_arready_next = 1'b0;
+                read_state_next = READ_STATE_RDATA;
+            end else begin
+                read_state_next = READ_STATE_IDLE;
+            
+            end
 
         end
-        READ_STATE_RDATA: begin
+        READ_STATE_RDATA: begin // In this state, we wait for a ready signal from master to ack retrieval to then go back to READ_STATE_IDLE
             //TODO: Finish the following code
             //similar manner as the write state machine
+            mem_rd_en = 1'b1;
+            s_axi_rid_next = read_id_reg;
+            s_axi_rvalid_next = 1'b1;
+            // every read is the last part of a burst
+            s_axi_rlast_next = 1'b1;
 
+            if (s_axi_rready && s_axi_rvalid) begin // handshake
+                s_axi_rvalid_next = 1'b0;
+                s_axi_arready_next = 1'b1; // ready to read the next address
+                read_state_next = READ_STATE_IDLE;
+            end else begin
+                // If we havent gotten the ready signal, we stay here until master ACKs.
+                read_state_next = READ_STATE_RDATA;
+            end
         end
-
-        //Note: don't worry about the read response for now. 
     endcase
 end
 
