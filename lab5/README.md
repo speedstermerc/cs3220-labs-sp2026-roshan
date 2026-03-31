@@ -159,6 +159,22 @@ Launch [riscv_test.ipynb](riscv_test.ipynb) within the designated Jupyter notebo
 
 *Please include a screenshot of the Jupyter notebook displaying the output in your report.* 
 
+### Step-3: Deploy on the Pynq Board (Workaround)
+
+#### [13] SSH test and upload the file
+
+Under GT VPN, `ssh [username]@pynq-z2-[1-50].cc.gatech.edu`
+- E.g. `ssh user@pynq-z2-23.cc.gatech.edu`, check whether you are able to access
+- `scp files user@pynq-z2-23.cc.gatech.edu:~/`, upload three files specified earlier with [riscv_test.py](riscv_test.py)
+
+*Please spread out usage of the PYNQ server to avoid unnecessary errors.*
+
+#### [14] Running on the Pynq Board
+
+Execute the code `python riscv_test.py`. The address 0x20 corresponds to `out1` and 0x30 to `out2`. The value at `out1` will continuously change, reflecting the cycle count, whereas the value at `out2` will display the static value from the 10th register.
+
+*Please include a screenshot of the terminal output displaying the output in your report.*
+
 ## Part-2: Dispatch Instructions to Your Processor with AXI Lite
 
 In Part 1, you learned to add output ports to your RISC-V processor and read values using AXI Lite. Real-world applications often require both reading outputs and sending inputs to the processor. In Part 2, you will:
@@ -176,7 +192,7 @@ The bitstream generation process for the revised RISC-V design mirrors that of S
 
 ### Step-3: Deploy on the Pynq Board
 
-Follow the instructions from Part-1 to upload your design to the Pynq Board. Then, load your processor design using [riscv_test2.ipynb](riscv_test2.ipynb).
+Follow the instructions from Part-1 to upload your design to the Pynq Board. Then, load your processor design using [riscv_test2.ipynb](riscv_test2.ipynb). (or [riscv_test2.py](riscv_test2.py) for workaround)
 
 ### Step-4: Dispatch Instructions to Your Processor
 
