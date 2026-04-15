@@ -3,6 +3,7 @@
 module FE_STAGE(
   input wire                              clk,
   input wire                              reset,
+  input wire [31:0] inst_input,
   input wire  [`from_DE_to_FE_WIDTH-1:0]  from_DE_to_FE,
   input wire  [`from_AGEX_to_FE_WIDTH-1:0] from_AGEX_to_FE,   
   input wire  [`from_MEM_to_FE_WIDTH-1:0] from_MEM_to_FE,   
@@ -39,7 +40,7 @@ module FE_STAGE(
   
   // reading instruction from imem 
   // TODO: Assign external input to inst_FE
-  assign inst_FE = imem[PC_FE_latch[`IMEMADDRBITS-1:`IMEMWORDBITS]];  // this code works. imem is stored 4B together
+  assign inst_FE = inst_input; // this code works. imem is stored 4B together
   
   // This is the value of "incremented PC", computed in the FE stage
   assign pcplus_FE = PC_FE_latch + `INSTSIZE;
