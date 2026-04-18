@@ -1,3 +1,4 @@
+// Control unit for the systolic array
 module ctrl #(
     parameter IN_WIDTH = 8,
     parameter OUT_WIDTH = 16,
@@ -26,7 +27,6 @@ module ctrl #(
             rst_acc_reg <= 0;
             stream_out_rdy_reg <= 0;
         end else begin
-            // Shift register logic: reg[0] represents a 1-cycle delay
             rst_acc_reg[0] <= input_rst_accumulator;
             stream_out_rdy_reg[0] <= input_stream_out_rdy;
             
@@ -37,7 +37,7 @@ module ctrl #(
         end
     end
 
-    // Column 0 is directly assigned to remain synchronized with row_data_in (0-cycle delay)
+    // directly assign Column 0 to remain synchronized with row_data_in (0-cycle delay)
     assign rst_accumulator[0] = input_rst_accumulator;
     assign stream_out_rdy[0]  = input_stream_out_rdy;
 

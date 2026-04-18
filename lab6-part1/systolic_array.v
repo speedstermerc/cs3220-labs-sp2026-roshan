@@ -1,3 +1,4 @@
+// wrapper of the systolic array, instantiate MAC units and control unit, connect them with wires
 module systolic_array #(
     parameter IN_WIDTH          = 8,
     parameter IN_FRAC           = 0,
@@ -37,15 +38,17 @@ module systolic_array #(
     //TODO: MAC units instantiation
     // - Image you are drawing a spatial diagram of the MAC units; how should you connect the wires of them?
     // - Use generate block to realize the spatial diagram (You are not required to use generate block though)
-    // MAC array wires
+
     wire [IN_WIDTH-1:0] mac_row_in [0:ROWS-1][0:COLS-1];
     wire [IN_WIDTH-1:0] mac_col_in [0:ROWS-1][0:COLS-1];
     wire [IN_WIDTH-1:0] mac_row_out [0:ROWS-1][0:COLS-1];
     wire [IN_WIDTH-1:0] mac_col_out [0:ROWS-1][0:COLS-1];
+
     wire mac_rst_in [0:ROWS-1][0:COLS-1];
     wire mac_str_in [0:ROWS-1][0:COLS-1];
-    wire mac_rst_out [0:ROWS-1][0:COLS-1];
     wire mac_str_out [0:ROWS-1][0:COLS-1];
+    wire mac_rst_out [0:ROWS-1][0:COLS-1];
+    
     wire [OUT_WIDTH-1:0] mac_psum_out [0:ROWS-1][0:COLS-1];
     wire [OUT_WIDTH-1:0] mac_bypass_in [0:ROWS-1][0:COLS-1];
 
@@ -53,14 +56,14 @@ module systolic_array #(
     generate
         for (r = 0; r < ROWS; r = r + 1) begin : row_gen
             for (c = 0; c < COLS; c = c + 1) begin : col_gen
-                // Horizontal Data routing (Matrix A)
+                // Matrix A coming in from the left
                 if (c == 0) begin
                     assign mac_row_in[r][c] = row_data_in[r*IN_WIDTH +: IN_WIDTH];
                 end else begin
                     assign mac_row_in[r][c] = mac_row_out[r][c-1];
                 end
 
-                // Vertical Data and Control routing (Matrix B)
+                // Matrix B coming in from the top
                 if (r == 0) begin
                     assign mac_col_in[r][c] = col_data_in[c*IN_WIDTH +: IN_WIDTH];
                     assign mac_rst_in[r][c] = ctrl_rst_accumulator[c];
@@ -71,14 +74,14 @@ module systolic_array #(
                     assign mac_str_in[r][c] = mac_str_out[r-1][c];
                 end
 
-                // Output Stream/Bypass routing (Right to Left)
+                // output routing from right to left and bypass routing for accumulation result
                 if (c == COLS - 1) begin
                     assign mac_bypass_in[r][c] = 0;
                 end else begin
                     assign mac_bypass_in[r][c] = mac_psum_out[r][c+1];
                 end
 
-                // MAC instantiation
+                // generate MAC unit for each spot in the grid
                 mac #(
                     .IN_WIDTH(IN_WIDTH), .IN_FRAC(IN_FRAC),
                     .OUT_WIDTH(OUT_WIDTH), .OUT_FRAC(OUT_FRAC),
@@ -99,7 +102,7 @@ module systolic_array #(
                     .psum_out(mac_psum_out[r][c])
                 );
             end
-            // Map the leftmost PE column output to the boundary port
+            // map the leftmost PE column output to the boundary port
             assign row_data_out[r*OUT_WIDTH +: OUT_WIDTH] = mac_psum_out[r][0];
         end
     endgenerate
